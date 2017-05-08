@@ -110,7 +110,7 @@ namespace University.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,LastName,FirstMidName,EnrollmentDate")] Student student)
+        public async Task<IActionResult> Create([Bind("ID,LastName,FirstMidName,EnrollmentDate,IRN,Major")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -152,7 +152,7 @@ namespace University.Controllers
             if (await TryUpdateModelAsync<Student>(
                 studentToUpdate,
                 "",
-                s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate))
+                s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate, s => s.IRN, s => s.Major))
             {
                 try
                 {
