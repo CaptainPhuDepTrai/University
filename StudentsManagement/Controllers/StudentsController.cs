@@ -118,7 +118,7 @@ namespace StudentsManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,LastName,FirstMidName,EnrollmentDate,IRN,Major")] Student student)
+        public async Task<IActionResult> Create([Bind("ID,LastName,FirstMidName,EnrollmentDate,IRN,Major,Phone Number, Facebook")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -160,7 +160,7 @@ namespace StudentsManagement.Controllers
             if (await TryUpdateModelAsync<Student>(
                 studentToUpdate,
                 "",
-                s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate, s => s.IRN, s => s.Major))
+                s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate, s => s.IRN, s => s.Major, s => s.PhoneNumber, s => s.Facebook))
             {
                 try
                 {
@@ -251,7 +251,7 @@ namespace StudentsManagement.Controllers
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
                     int rowCount = worksheet.Dimension.Rows;
                     int ColCount = worksheet.Dimension.Columns;
-                    bool bHeaderRow = true;
+                   
                     for (int row = 1; row <= rowCount; row++)
                     {
                         Student student = new Student();
@@ -260,6 +260,8 @@ namespace StudentsManagement.Controllers
                         student.LastName = worksheet.Cells[row, 3].Value.ToString();
                         student.Major = worksheet.Cells[row, 4].Value.ToString();
                         student.EnrollmentDate = Convert.ToDateTime(worksheet.Cells[row, 5].Value.ToString());
+                        student.PhoneNumber = worksheet.Cells[row, 6].Value.ToString();
+                        student.Facebook = worksheet.Cells[row, 7].Value.ToString();
                         _context.Add(student);
                         await _context.SaveChangesAsync();
 
@@ -288,6 +290,8 @@ namespace StudentsManagement.Controllers
                 worksheet.Cells[1, 3].Value = "LastName";
                 worksheet.Cells[1, 4].Value = "Major";
                 worksheet.Cells[1, 5].Value = "Enrollment Date";
+                worksheet.Cells[1, 6].Value = "Phone Number";
+                worksheet.Cells[1, 7].Value = "Facebook";
 
                 int row = 2;
                 foreach (var item in _context.Students)
@@ -297,6 +301,8 @@ namespace StudentsManagement.Controllers
                     worksheet.Cells[row, 3].Value = item.LastName;
                     worksheet.Cells[row, 4].Value = item.Major;
                     worksheet.Cells[row, 5].Value = item.EnrollmentDate.ToString("dd-mm-yy");
+                    worksheet.Cells[row, 6].Value = item.PhoneNumber;
+                    worksheet.Cells[row, 7].Value = item.Facebook;
 
                     row++;
                 }

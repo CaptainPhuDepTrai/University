@@ -16,6 +16,9 @@ namespace StudentsManagement.Models
         public String Major { get; set; } //khoa
 
         public String IRN { get; set; } //mssv
+        public String PhoneNumber { get; set; } // phone
+
+        public String Facebook { get; set; } // Facebook 
 
         public ICollection<Enrollment> Enrollments { get; set; }
 
