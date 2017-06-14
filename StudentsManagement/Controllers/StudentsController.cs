@@ -252,13 +252,14 @@ namespace StudentsManagement.Controllers
                     int rowCount = worksheet.Dimension.Rows;
                     int ColCount = worksheet.Dimension.Columns;
                    
-                    for (int row = 1; row <= rowCount; row++)
+                    for (int row = 2; row <= rowCount; row++)
                     {
                         Student student = new Student();
                         student.IRN = worksheet.Cells[row, 1].Value.ToString();
                         student.FirstMidName = worksheet.Cells[row, 2].Value.ToString();
                         student.LastName = worksheet.Cells[row, 3].Value.ToString();
                         student.Major = worksheet.Cells[row, 4].Value.ToString();
+                        //String a = worksheet.Cells[row, 5].Value.ToString();
                         student.EnrollmentDate = Convert.ToDateTime(worksheet.Cells[row, 5].Value.ToString());
                         student.PhoneNumber = worksheet.Cells[row, 6].Value.ToString();
                         student.Facebook = worksheet.Cells[row, 7].Value.ToString();
@@ -300,7 +301,7 @@ namespace StudentsManagement.Controllers
                     worksheet.Cells[row, 2].Value = item.FirstMidName;
                     worksheet.Cells[row, 3].Value = item.LastName;
                     worksheet.Cells[row, 4].Value = item.Major;
-                    worksheet.Cells[row, 5].Value = item.EnrollmentDate.ToString("dd-mm-yy");
+                    worksheet.Cells[row, 5].Value = item.EnrollmentDate.ToString("MM/dd/yyyy");
                     worksheet.Cells[row, 6].Value = item.PhoneNumber;
                     worksheet.Cells[row, 7].Value = item.Facebook;
 
