@@ -18,7 +18,6 @@ namespace StudentsManagement
 
             this.AddRange(items);
         }
-
         public bool HasPreviousPage
         {
             get

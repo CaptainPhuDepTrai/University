@@ -120,6 +120,11 @@ namespace StudentsManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,LastName,FirstMidName,EnrollmentDate,IRN,Major,Phone Number, Facebook")] Student student)
         {
+            if (StudentExist(student.IRN))
+            {
+                ViewData["ErrorMessage"] = "Mã số sinh viên đã tồn tại!";
+                return View("Error");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(student);
@@ -127,6 +132,11 @@ namespace StudentsManagement.Controllers
                 return RedirectToAction("Index");
             }
             return View(student);
+        }
+
+        private bool StudentExist(string iRN)
+        {
+            return _context.Students.AsNoTracking().Any(s => s.IRN == iRN);
         }
 
         // GET: Students/Edit/5
@@ -255,14 +265,65 @@ namespace StudentsManagement.Controllers
                     for (int row = 2; row <= rowCount; row++)
                     {
                         Student student = new Student();
-                        student.IRN = worksheet.Cells[row, 1].Value.ToString();
-                        student.FirstMidName = worksheet.Cells[row, 2].Value.ToString();
-                        student.LastName = worksheet.Cells[row, 3].Value.ToString();
-                        student.Major = worksheet.Cells[row, 4].Value.ToString();
-                        //String a = worksheet.Cells[row, 5].Value.ToString();
-                        student.EnrollmentDate = Convert.ToDateTime(worksheet.Cells[row, 5].Value.ToString());
-                        student.PhoneNumber = worksheet.Cells[row, 6].Value.ToString();
-                        student.Facebook = worksheet.Cells[row, 7].Value.ToString();
+                        if (worksheet.Cells[row, 1].Value == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            if(_context.Students.Any(s=>s.IRN== worksheet.Cells[row, 1].Value.ToString())){
+                                continue;
+                            }
+                            student.IRN = worksheet.Cells[row, 1].Value.ToString();
+                        }
+                        if(worksheet.Cells[row, 2].Value== null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            student.FirstMidName = worksheet.Cells[row, 2].Value.ToString();
+                        }
+                        if (worksheet.Cells[row, 3].Value == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            student.LastName = worksheet.Cells[row, 3].Value.ToString();
+                        }
+                        if (worksheet.Cells[row, 4].Value == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            student.Major = worksheet.Cells[row, 4].Value.ToString();
+                        }
+                        if (Convert.ToDateTime(worksheet.Cells[row, 5].Value) == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            student.EnrollmentDate = Convert.ToDateTime(worksheet.Cells[row, 5].Value.ToString());
+                        }
+                        if (worksheet.Cells[row, 6].Value == null)
+                        {
+                            student.PhoneNumber = "";
+                        }
+                        else
+                        {
+                            student.PhoneNumber = worksheet.Cells[row, 6].Value.ToString();
+                        }
+                        if (worksheet.Cells[row, 7].Value == null)
+                        {
+                            student.Facebook = "";
+                        }
+                        else
+                        {
+                            student.Facebook = worksheet.Cells[row, 7].Value.ToString();
+                        }                 
                         _context.Add(student);
                         await _context.SaveChangesAsync();
 
